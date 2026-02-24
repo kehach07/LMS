@@ -1,7 +1,9 @@
 from rest_framework import generics, permissions
 from .models import *
 from .serializers import *
-
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.response import Response
+from rest_framework import status
 from rest_framework_simplejwt.views import TokenRefreshView,TokenObtainPairView
 # ---------- Instructor APIs ----------
 
@@ -55,19 +57,22 @@ class MarkLessonCompleteView(generics.CreateAPIView):
 class SignUpView(generics.CreateAPIView):
     serializer_class = SignUpSerializer
     permission_classes = [permissions.AllowAny]
-
-
-class CustomLoginView(TokenObtainPairView):
+class LoginView(generics.GenericAPIView):
+    serializer_class = LoginSerializer
     permission_classes = [permissions.AllowAny]
 
-    def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
-        user = User.objects.get(username=request.data["username"])
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
-        response.data["user"] = {
-            "id": user.id,
+        user = serializer.validated_data["user"]
+
+        refresh = RefreshToken.for_user(user)
+
+        return Response({
+            "access": str(refresh.access_token),
+            "refresh": str(refresh),
             "username": user.username,
             "email": user.email,
             "role": user.role
-        }
-        return response
+        }, status=status.HTTP_200_OK)

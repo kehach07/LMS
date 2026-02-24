@@ -8,7 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { signInApi } from "@/services/authService";
 
 const SignIn = () => {
-  const [email, setEmail] = useState("");
+  const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -21,21 +21,33 @@ const SignIn = () => {
     setLoading(true);
 
     try {
+      // Call backend
       const data = await signInApi({
-        username: email, // backend uses username
+        username_or_email: usernameOrEmail,
         password,
       });
 
+      // Save tokens
       localStorage.setItem("access", data.access);
       localStorage.setItem("refresh", data.refresh);
-      localStorage.setItem("user", JSON.stringify(data.user));
+
+      // Save user info
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          username: data.username,
+          email: data.email,
+          role: data.role,
+        })
+      );
 
       toast({
         title: "Welcome back!",
         description: "Signed in successfully",
       });
 
-      if (data.user.role === "instructor") {
+      // Redirect based on role
+      if (data.role === "instructor") {
         navigate("/instructor/dashboard");
       } else {
         navigate("/dashboard");
@@ -43,7 +55,11 @@ const SignIn = () => {
     } catch (err: any) {
       toast({
         title: "Login failed",
-        description: err?.detail || JSON.stringify(err),
+        description:
+          err?.detail ||
+          err?.non_field_errors?.[0] ||
+          err?.message ||
+          "Invalid username/email or password",
       });
     }
 
@@ -53,47 +69,80 @@ const SignIn = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="w-full max-w-md space-y-8">
+        {/* Header */}
         <div className="text-center">
-          <GraduationCap className="mx-auto h-10 w-10" />
-          <h1 className="text-2xl font-bold mt-4">Sign In</h1>
+          <Link to="/" className="inline-flex items-center gap-2">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
+              <GraduationCap className="h-5 w-5 text-primary-foreground" />
+            </div>
+            <span className="font-display text-2xl font-bold text-foreground">
+              LearnHub
+            </span>
+          </Link>
+          <h1 className="mt-6 font-display text-2xl font-bold text-foreground">
+            Welcome back
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Sign in to continue learning
+          </p>
         </div>
 
-        <div className="border rounded-xl p-6 bg-card shadow-sm">
+        {/* Form Card */}
+        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
           <form onSubmit={handleSubmit} className="space-y-4">
-
-            <div>
+            {/* Email / Username */}
+            <div className="space-y-2">
               <Label>Email / Username</Label>
-              <Input value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <Input
+                type="text"
+                placeholder="Enter email or username"
+                value={usernameOrEmail}
+                onChange={(e) => setUsernameOrEmail(e.target.value)}
+                required
+              />
             </div>
 
-            <div>
+            {/* Password */}
+            <div className="space-y-2">
               <Label>Password</Label>
               <div className="relative">
                 <Input
                   type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 -translate-y-1/2"
                   onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                 >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </button>
               </div>
             </div>
 
-            <Button className="w-full" disabled={loading}>
+            {/* Submit */}
+            <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
         </div>
 
-        <p className="text-center text-sm">
+        {/* Footer */}
+        <p className="text-center text-sm text-muted-foreground">
           Don't have an account?{" "}
-          <Link to="/signup" className="text-primary">Sign up</Link>
+          <Link
+            to="/signup"
+            className="font-medium text-primary hover:underline"
+          >
+            Sign up
+          </Link>
         </p>
       </div>
     </div>
