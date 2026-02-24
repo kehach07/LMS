@@ -6,7 +6,7 @@ export const signUpApi = async (data: {
   password: string;
   role: string;
 }) => {
-  const res = await fetch(`${API}/auth/signup/`, {
+  const res = await fetch(`${API}/api/signup/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
@@ -18,15 +18,27 @@ export const signUpApi = async (data: {
 
 
 export const signInApi = async (data: {
-  username: string;
+  username_or_email: string;
   password: string;
 }) => {
-  const res = await fetch(`${API}/auth/login/`, {
+  const res = await fetch(`${API}/api/login/`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(data),
   });
 
-  if (!res.ok) throw await res.json();
-  return res.json();
+  const result = await res.json();
+
+  if (!res.ok) {
+    // Backend may send: { detail: "..."} or validation errors
+    throw new Error(
+      result.detail ||
+      result.username_or_email?.[0] ||
+      "Login failed"
+    );
+  }
+
+  return result;
 };
