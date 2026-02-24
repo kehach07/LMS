@@ -52,3 +52,7 @@ class MarkLessonCompleteView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(student=self.request.user)
+
+class SignUpView(generics.CreateAPIView):
+    serializer_class = SignUpSerializer
+    permission_classes = [permissions.AllowAny]

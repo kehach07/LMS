@@ -56,8 +56,30 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <img src={user.avatar} alt={user.name} className="h-8 w-8 rounded-full object-cover ring-2 ring-border" />
-          </div>
+          {/* Auth Buttons (UI only) */}
+          {!currentUserId ? (
+            <>
+              <Link
+                to="/signin"
+                className="rounded-lg border border-border px-4 py-1.5 text-sm font-medium text-foreground hover:bg-muted transition-colors"
+              >
+                Sign In
+              </Link>
+              <Link
+                to="/signup"
+                className="rounded-lg bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground hover:opacity-90 transition-opacity"
+              >
+                Sign Up
+              </Link>
+            </>
+          ) : (
+            <img
+              src={user.avatar}
+              alt={user.name}
+              className="h-8 w-8 rounded-full object-cover ring-2 ring-border"
+            />
+          )}
+        </div>
         </div>
       </div>
     </header>
