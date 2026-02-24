@@ -1,5 +1,10 @@
 # LMS Backend (Django + DRF)
-
+cd lms-backend
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver 0.0.0.0:8001
 Backend API for a minimal **Learning Management System (LMS)** where:
 
 * Instructors create courses and lessons
