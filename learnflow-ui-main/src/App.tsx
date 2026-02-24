@@ -27,6 +27,7 @@ import CourseStudents from "@/pages/CourseStudents";
 import NotFound from "@/pages/NotFound";
 import SignIn from "@/pages/SignIn";
 import SignUp from "@/pages/SignUp";
+import { AuthProvider } from "./contexts/AuthContext";
 
 const queryClient = new QueryClient();
 
@@ -91,7 +92,9 @@ const App = () => {
         <BrowserRouter>
           <RoleProvider>
             <EnrollmentProvider>
-              <AppRoutes />
+            <AuthProvider>
+            <AppRoutes />
+          </AuthProvider>
             </EnrollmentProvider>
           </RoleProvider>
         </BrowserRouter>
