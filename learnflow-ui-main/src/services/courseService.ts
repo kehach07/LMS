@@ -12,6 +12,15 @@ export const getInstructorCourses = async () => {
   if (!res.ok) throw await res.json();
   return res.json();
 };
+export const getCoursesApi = async () => {
+  const response = await fetch(`${API}/api/courses/`);
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch courses");
+  }
+
+  return response.json();
+};
 export const createCourseApi = async (data: {
   title: string;
   description: string;

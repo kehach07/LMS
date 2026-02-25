@@ -160,3 +160,35 @@ class CourseListView(generics.ListAPIView):
     queryset = Course.objects.filter(is_published=True)
     serializer_class = CourseSerializer
     permission_classes = [permissions.AllowAny]
+
+class InstructorLessonCreateView(generics.CreateAPIView):
+    serializer_class = LessonSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class CourseLessonsView(generics.ListAPIView):
+    serializer_class = LessonSerializer
+
+    def get_queryset(self):
+        course_id = self.kwargs["course_id"]
+        return Lesson.objects.filter(course_id=course_id).order_by("order")
+    
+class EnrollCourseView(generics.CreateAPIView):
+    serializer_class = EnrollmentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(student=self.request.user)
+
+class MyCoursesView(generics.ListAPIView):
+    serializer_class = EnrollmentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Enrollment.objects.filter(student=self.request.user)
+    
+class MarkLessonCompleteView(generics.CreateAPIView):
+    serializer_class = LessonCompletionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(student=self.request.user)

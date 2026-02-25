@@ -1,36 +1,75 @@
-import { useRole } from "@/contexts/RoleContext";
-import { useEnrollment } from "@/contexts/EnrollmentContext";
-import { getCourse, getProgress } from "@/data/mockData";
+import { useEffect, useState } from "react";
+import { getCoursesApi } from "@/services/courseService";
 import CourseCard from "@/components/CourseCard";
 import { Link } from "react-router-dom";
 
 const MyCourses = () => {
-  const { currentUserId } = useRole();
-  const { enrollments } = useEnrollment();
+  const [courses, setCourses] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const myEnrollments = enrollments.filter(e => e.studentId === currentUserId);
-  const coursesWithProgress = myEnrollments.map(e => {
-    const course = getCourse(e.courseId);
-    return course ? { course, progress: getProgress(e, course) } : null;
-  }).filter(Boolean) as { course: any; progress: number }[];
+  useEffect(() => {
+    fetchCourses();
+  }, []);
+
+  const fetchCourses = async () => {
+    try {
+      const data = await getCoursesApi();
+      setCourses(data);
+    } catch (err) {
+      console.error("Failed to load courses", err);
+    }
+    setLoading(false);
+  };
+
+  if (loading) {
+    return (
+      <div className="mx-auto max-w-7xl px-4 py-20 text-center">
+        Loading courses...
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+      {/* Header */}
       <div className="mb-8">
-        <h1 className="font-display text-3xl font-bold text-foreground">My Courses</h1>
-        <p className="mt-1 text-muted-foreground">{coursesWithProgress.length} courses enrolled</p>
+        <h1 className="font-display text-3xl font-bold text-foreground">
+          My Courses
+        </h1>
+        <p className="mt-1 text-muted-foreground">
+          {courses.length} courses available
+        </p>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {coursesWithProgress.map(({ course, progress }) => (
-          <CourseCard key={course.id} course={course} progress={progress} enrolled linkTo={`/learn/${course.id}`} />
-        ))}
-      </div>
-
-      {coursesWithProgress.length === 0 && (
+      {/* Courses Grid */}
+      {courses.length > 0 ? (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {courses.map((course) => (
+            <CourseCard
+              key={course.id}
+              course={{
+                id: course.id,
+                title: course.title,
+                description: course.description,
+                image: course.cover_image,
+              }}
+              progress={0}
+              enrolled={false}
+              linkTo={`/learn/${course.id}`}
+            />
+          ))}
+        </div>
+      ) : (
         <div className="py-20 text-center">
-          <p className="text-lg text-muted-foreground mb-2">No courses yet</p>
-          <Link to="/catalog" className="text-primary font-medium hover:underline">Browse courses →</Link>
+          <p className="text-lg text-muted-foreground mb-2">
+            No courses available
+          </p>
+          <Link
+            to="/catalog"
+            className="text-primary font-medium hover:underline"
+          >
+            Browse courses →
+          </Link>
         </div>
       )}
     </div>

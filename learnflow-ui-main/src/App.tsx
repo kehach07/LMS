@@ -77,7 +77,7 @@ function AppRoutes() {
         <Route path="/instructor/courses" element={<InstructorCourses />} />
         <Route path="/instructor/courses/:courseId/students" element={<CourseStudents />} />
         
-        <Route path="/instructor/courses/new" element={<CreateCourse />} />
+        <Route path="/instructor/courses/create" element={<CreateCourse />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
