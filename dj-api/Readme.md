@@ -1,7 +1,7 @@
 # LMS Backend (Django + DRF)
 cd lms-backend
 python -m venv venv
-source venv/bin/activate
+.\venv\Scripts\Activate
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver 0.0.0.0:8001
