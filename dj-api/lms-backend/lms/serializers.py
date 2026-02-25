@@ -7,19 +7,17 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'role']
 
 
+class CourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = "__all__"
+        read_only_fields = ["instructor"]
+
+
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
-        fields = '__all__'
-
-
-class CourseSerializer(serializers.ModelSerializer):
-    lessons = LessonSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Course
-        fields = '__all__'
-
+        fields = "__all__"
 
 class EnrollmentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -31,9 +29,9 @@ class LessonCompletionSerializer(serializers.ModelSerializer):
     class Meta:
         model = LessonCompletion
         fields = '__all__'
-
 class SignUpSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
+    role = serializers.ChoiceField(choices=['student', 'instructor'])
 
     class Meta:
         model = User
@@ -47,7 +45,6 @@ class SignUpSerializer(serializers.ModelSerializer):
             role=validated_data.get('role', 'student')
         )
         return user
-
 class LoginSerializer(serializers.Serializer):
     username_or_email = serializers.CharField()
     password = serializers.CharField(write_only=True)

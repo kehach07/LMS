@@ -13,7 +13,9 @@ import {
 import { RoleProvider } from "@/contexts/RoleContext";
 import { EnrollmentProvider } from "@/contexts/EnrollmentContext";
 
-import Navbar from "@/components/Navbar";
+import StudentNavbar from "@/components/StudentNavbar";
+import InstructorNavbar from "@/components/InstructorNavbar";
+import { useAuth } from "@/contexts/AuthContext";
 
 // Pages
 import Home from "@/pages/Home";
@@ -28,59 +30,59 @@ import NotFound from "@/pages/NotFound";
 import SignIn from "@/pages/SignIn";
 import SignUp from "@/pages/SignUp";
 import { AuthProvider } from "./contexts/AuthContext";
-
+import CreateCourse from "@/pages/CreateCourse";
 const queryClient = new QueryClient();
 
 /* ---------------- Layout with Navbar logic ---------------- */
-
 function AppRoutes() {
   const location = useLocation();
+  const { user } = useAuth();
 
-  // Hide navbar on auth pages
   const hideNavbar =
     location.pathname === "/signin" ||
     location.pathname === "/signup";
 
+  const renderNavbar = () => {
+    if (hideNavbar) return null;
+
+    if (!user) return null;
+
+    if (user.role === "instructor") {
+      return <InstructorNavbar />;
+    }
+
+    return <StudentNavbar />;
+  };
+
   return (
     <div className="min-h-screen bg-background">
-      {!hideNavbar && <Navbar />}
+      {renderNavbar()}
 
       <Routes>
-        {/* Default redirect */}
         <Route path="/" element={<Navigate to="/signin" replace />} />
 
         {/* Auth */}
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
 
-        {/* Student routes */}
+        {/* Student */}
         <Route path="/home" element={<Home />} />
         <Route path="/catalog" element={<CourseCatalog />} />
         <Route path="/my-courses" element={<MyCourses />} />
         <Route path="/dashboard" element={<StudentDashboard />} />
         <Route path="/learn/:courseId" element={<CourseLearning />} />
 
-        {/* Instructor routes */}
-        <Route
-          path="/instructor/dashboard"
-          element={<InstructorDashboard />}
-        />
-        <Route
-          path="/instructor/courses"
-          element={<InstructorCourses />}
-        />
-        <Route
-          path="/instructor/courses/:courseId/students"
-          element={<CourseStudents />}
-        />
-
-        {/* 404 */}
+        {/* Instructor */}
+        <Route path="/instructor/dashboard" element={<InstructorDashboard />} />
+        <Route path="/instructor/courses" element={<InstructorCourses />} />
+        <Route path="/instructor/courses/:courseId/students" element={<CourseStudents />} />
+        
+        <Route path="/instructor/courses/new" element={<CreateCourse />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );
 }
-
 /* ---------------- Main App ---------------- */
 
 const App = () => {

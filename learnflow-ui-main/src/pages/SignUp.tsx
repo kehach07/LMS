@@ -12,6 +12,7 @@ const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("student");
   const [showPassword, setShowPassword] = useState(false);
   const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -30,15 +31,20 @@ const SignUp = () => {
         username: name,
         email,
         password,
-        role: "student", // default role
+        role,
       });
 
+      // Success message
       toast({
         title: "Account created!",
-        description: "Please sign in.",
+        description: "Redirecting to Sign In...",
       });
 
-      navigate("/signin");
+      // Small delay so user sees toast
+      setTimeout(() => {
+        navigate("/signin");
+      }, 1000);
+
     } catch (err: any) {
       toast({
         title: "Signup failed",
@@ -51,8 +57,6 @@ const SignUp = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      {/* --- YOUR UI EXACTLY SAME --- */}
-      {/* Only handleSubmit changed */}
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
           <Link to="/" className="inline-flex items-center gap-2">
@@ -69,12 +73,21 @@ const SignUp = () => {
 
             <div>
               <Label>Full Name</Label>
-              <Input value={name} onChange={(e) => setName(e.target.value)} required />
+              <Input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
             </div>
 
             <div>
               <Label>Email</Label>
-              <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </div>
 
             <div>
@@ -97,8 +110,23 @@ const SignUp = () => {
               </div>
             </div>
 
+            <div>
+              <Label>I am a</Label>
+              <select
+                className="w-full border rounded-md p-2 bg-background"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+              >
+                <option value="student">Student</option>
+                <option value="instructor">Instructor</option>
+              </select>
+            </div>
+
             <div className="flex items-center gap-2">
-              <Checkbox checked={agreed} onCheckedChange={(v) => setAgreed(v === true)} />
+              <Checkbox
+                checked={agreed}
+                onCheckedChange={(v) => setAgreed(v === true)}
+              />
               <span className="text-sm">I agree to terms</span>
             </div>
 
@@ -110,7 +138,9 @@ const SignUp = () => {
 
         <p className="text-center text-sm">
           Already have an account?{" "}
-          <Link to="/signin" className="text-primary">Sign in</Link>
+          <Link to="/signin" className="text-primary">
+            Sign in
+          </Link>
         </p>
       </div>
     </div>

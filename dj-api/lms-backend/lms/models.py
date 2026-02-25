@@ -18,7 +18,7 @@ class Course(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     instructor = models.ForeignKey(User, on_delete=models.CASCADE)
-    cover_image = models.URLField(blank=True, null=True)
+    cover_image = models.ImageField(upload_to='course_covers/', blank=True, null=True)
     is_published = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
