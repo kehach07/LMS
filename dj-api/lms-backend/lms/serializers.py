@@ -14,21 +14,28 @@ class CourseSerializer(serializers.ModelSerializer):
         read_only_fields = ["instructor"]
 
 
+# -------- Lesson --------
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = "__all__"
 
+
+# -------- Enrollment --------
 class EnrollmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enrollment
-        fields = '__all__'
+        fields = "__all__"
+        read_only_fields = ["student"]
 
 
+# -------- Completion --------
 class LessonCompletionSerializer(serializers.ModelSerializer):
     class Meta:
         model = LessonCompletion
-        fields = '__all__'
+        fields = "__all__"
+        read_only_fields = ["student"]
+
 class SignUpSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     role = serializers.ChoiceField(choices=['student', 'instructor'])
