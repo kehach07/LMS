@@ -1,4 +1,6 @@
-LMS Backend – API Documentation
+LMS Backend – API Documentation 
+Hosted Application: https://lmstool-ten.vercel.app
+
 Base URL
 http://localhost:8000/api/
 
