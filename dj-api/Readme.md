@@ -104,7 +104,6 @@ lms-backend/
 | created_at   | datetime  |
 
 ---
-
 ### Lesson
 | Field       | Type         |
 | ----------- | ------------ |
@@ -116,7 +115,6 @@ lms-backend/
 | order       | integer      |
 
 ---
-
 ### Enrollment
 | Field       | Type        |
 | ----------- | ----------- |
@@ -127,7 +125,6 @@ lms-backend/
 Unique: `(student, course)`
 
 ---
-
 ### LessonCompletion
 | Field        | Type        |
 | ------------ | ----------- |
