@@ -84,10 +84,8 @@ POST /api/auth/refresh/
 POST /api/instructor/courses/create/
 
 Headers:
-
 Authorization: Bearer <token>
 Content-Type: multipart/form-data
-
 Body (form-data):
 
 title: Python Basics
@@ -160,50 +158,31 @@ POST /api/complete/
   "lesson": 5
 }
 5. Media Configuration
-
 In settings.py
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 In urls.py
-
 from django.conf import settings
 from django.conf.urls.static import static
-
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 6. Postman Collection (Required for Submission)
-
 Create a collection named:
-
 LMS APIs
-
 Add requests:
-
 Auth
-
 POST /signup
-
 POST /login
-
 POST /auth/refresh
-
 Instructor
-
 GET /instructor/courses
-
 POST /instructor/courses/create
-
 POST /instructor/lesson/create
-
 GET /instructor/dashboard
-
 Student
-
 GET /courses
-
 POST /enroll
-
 GET /my-courses
 
 POST /complete
