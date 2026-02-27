@@ -28,11 +28,9 @@ Run Server
 python manage.py runserver
 
 Server runs at:
-
 http://127.0.0.1:8000/
 2. Authentication APIs
 2.1 Sign Up
-
 POST /api/signup/
 
 Request:
@@ -43,23 +41,19 @@ Request:
   "password": "password123",
   "role": "student"
 }
-
 Response:
 
 201 Created
 2.2 Login (Username OR Email)
 
 POST /api/login/
-
 Request:
 
 {
   "username_or_email": "john",
   "password": "password123"
 }
-
 Response:
-
 {
   "access": "...",
   "refresh": "...",
@@ -67,14 +61,11 @@ Response:
   "email": "john@gmail.com",
   "role": "student"
 }
-
 Save:
-
 Authorization: Bearer <access>
 2.3 Refresh Token
 
 POST /api/auth/refresh/
-
 {
   "refresh": "<refresh_token>"
 }
@@ -110,7 +101,6 @@ POST /api/instructor/lesson/create/
 }
 
 For video:
-
 {
   "course": 1,
   "title": "Setup",
@@ -118,7 +108,6 @@ For video:
   "video_url": "https://youtube.com/..."
 }
 3.4 Instructor Dashboard
-
 GET /api/instructor/dashboard/
 
 Returns:
