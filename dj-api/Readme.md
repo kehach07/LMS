@@ -82,7 +82,6 @@ lms-backend/
 ---
 
 ## 🧱 Database Models
-
 ### User (Custom)
 
 | Field    | Type                 |
@@ -95,7 +94,6 @@ lms-backend/
 ---
 
 ### Course
-
 | Field        | Type      |
 | ------------ | --------- |
 | title        | string    |
@@ -108,7 +106,6 @@ lms-backend/
 ---
 
 ### Lesson
-
 | Field       | Type         |
 | ----------- | ------------ |
 | course      | FK → Course  |
@@ -121,7 +118,6 @@ lms-backend/
 ---
 
 ### Enrollment
-
 | Field       | Type        |
 | ----------- | ----------- |
 | student     | FK → User   |
@@ -133,7 +129,6 @@ Unique: `(student, course)`
 ---
 
 ### LessonCompletion
-
 | Field        | Type        |
 | ------------ | ----------- |
 | student      | FK → User   |
@@ -145,18 +140,14 @@ Unique: `(student, lesson)`
 ---
 
 ## ⚙️ Setup Instructions
-
 ### 1. Clone Repository
-
 ```
 git clone <repo-url>
 cd lms-backend
 ```
-
 ---
 
 ### 2. Create Virtual Environment
-
 ```
 python -m venv venv
 source venv/bin/activate       # Windows: venv\Scripts\activate
@@ -165,7 +156,6 @@ source venv/bin/activate       # Windows: venv\Scripts\activate
 ---
 
 ### 3. Install Dependencies
-
 ```
 pip install django djangorestframework djangorestframework-simplejwt
 ```
@@ -173,7 +163,6 @@ pip install django djangorestframework djangorestframework-simplejwt
 ---
 
 ### 4. Run Migrations
-
 ```
 python manage.py makemigrations
 python manage.py migrate
@@ -182,7 +171,6 @@ python manage.py migrate
 ---
 
 ### 5. Create Superuser (optional)
-
 ```
 python manage.py createsuperuser
 ```
@@ -190,7 +178,6 @@ python manage.py createsuperuser
 ---
 
 ### 6. Run Server
-
 ```
 python manage.py runserver
 ```
@@ -206,35 +193,27 @@ http://127.0.0.1:8000/
 ## 🔐 Authentication (JWT)
 
 ### Login
-
 **POST**
-
 ```
 /api/token/
 ```
-
 Body:
-
 ```
 {
   "username": "user",
   "password": "password"
 }
 ```
-
 Response:
 
 ```
 access
 refresh
 ```
-
 Use header for protected APIs:
-
 ```
 Authorization: Bearer <access_token>
 ```
-
 ---
 
 ## 📡 API Endpoints
@@ -257,7 +236,6 @@ Authorization: Bearer <access_token>
 ---
 
 ### Enrollment
-
 | Method | Endpoint           | Description              |
 | ------ | ------------------ | ------------------------ |
 | POST   | `/api/enroll/`     | Enroll in course         |
@@ -266,7 +244,6 @@ Authorization: Bearer <access_token>
 ---
 
 ### Lesson Completion
-
 | Method | Endpoint         | Description              |
 | ------ | ---------------- | ------------------------ |
 | POST   | `/api/complete/` | Mark lesson as completed |
@@ -274,7 +251,6 @@ Authorization: Bearer <access_token>
 ---
 
 ## 🧪 Example Request (Postman)
-
 Header:
 
 ```
